@@ -27,9 +27,15 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="5" Background="Cornsilk" >
-                                <TextBlock FontSize="14" Text="{Binding Name}" />
-                                <TextBlock Text="{Binding Path=Type}" />
-                                <TextBlock Text="{Binding Path=Price}" />
+                                <TextBlock Padding= "3 0 0 0" FontSize="14" Text="{Binding Name}" />
+                                <TextBlock Padding= "3 0 0 0" Text="{Binding Path=Type}" />
+                                <TextBlock Padding= "3 0 0 0">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} грн.">
+                                            <Binding Path="Price"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -44,8 +50,14 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="1" Background="Cornsilk" >
-                                <TextBlock FontSize="12" Text="{Binding Name}" />
-                                <TextBlock Text="{Binding Path=Distance}" />
+                                <TextBlock Padding= "3 0 0 0" FontSize="12" Text="{Binding Name}" />
+                                <TextBlock Padding= "3 0 0 0">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} км">
+                                            <Binding Path="Distance"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -73,31 +85,31 @@
             </Grid.RowDefinitions>
             <Label Content="Список товарів:" HorizontalAlignment="Center"/>
             <Border BorderBrush="Azure" BorderThickness="1">
-            <StackPanel >
+            <StackPanel>
                 <Canvas>
-                <ListBox MaxHeight="200" Width="300" Canvas.Top="50" Canvas.Left="20" 
-                         Background="Wheat"
-                         HorizontalContentAlignment="Stretch" ItemsSource="{Binding Orders}" SelectedItem="{Binding 
+                    <ListBox MaxHeight="200" Width="220" Canvas.Top="50" Canvas.Left="55" 
+                             Background="Wheat"
+                             HorizontalContentAlignment="Stretch" ItemsSource="{Binding Orders}" SelectedItem="{Binding 
                          SelectedOrder}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel  x:Name="stackPanel" Orientation="Horizontal" MaxWidth="230" Margin="5" Background="Cornsilk">
-                                <TextBlock FontSize="16" Text="{Binding Id}" >
-                                </TextBlock>
-                                <TextBlock Text="{Binding Path=TimeOfCreation}" />
-                                <Button Command="{Binding DataContext.DeleteOrderCommand, 
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel  x:Name="stackPanel" Orientation="Horizontal" MaxWidth="230" Margin="5" Background="Cornsilk">
+                                    <TextBlock FontSize="16" Text="{Binding Id}" >
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding Path=TimeOfCreation}" />
+                                    <Button Command="{Binding DataContext.DeleteOrderCommand, 
                                 RelativeSource={RelativeSource 
                                 AncestorType=Grid}}"  Height="20" Width="20">
-                                    <StackPanel>
-                                        <Image Source="C:Users/Vyatalech/Desktop/trash.png"/>
-                                    </StackPanel>
-                                </Button>
-                            </StackPanel>
-                            
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                    
-                </ListBox>       
+                                        <StackPanel>
+                                            <Image Source="C:Users/Vyatalech/Desktop/trash.png"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+
+                    </ListBox>       
                 </Canvas>
             </StackPanel>
             </Border>
@@ -114,21 +126,21 @@
                     <Canvas Grid.Row="0">
                         <TextBlock  Padding="3 0 0 0" Background="Cornsilk" Canvas.Left="55" Canvas.Top="25" Width="220" Height="25">
                             <TextBlock.Text>
-                                <MultiBinding StringFormat="{}Total Cost: {0}">
+                                <MultiBinding StringFormat="{}Ціна: {0} грн.">
                                     <Binding Path="TotalCost"/>
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
                         <TextBlock  Padding="3 0 0 0" Background="Cornsilk" Width="220" Canvas.Left="55" Height="25" Canvas.Top="50">
                             <TextBlock.Text >
-                                <MultiBinding StringFormat="{}Creation Time: {0}">
+                                <MultiBinding StringFormat="{}Дата створення: {0}">
                                     <Binding Path="TimeOfCreation"/>
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
                         <TextBlock Padding="3 0 0 0" Background="Cornsilk" Width="220" Canvas.Left="55" Height="25" Canvas.Top="75">
                             <TextBlock.Text>
-                                <MultiBinding StringFormat="{}Estimate Delivery Time: {0}">
+                                <MultiBinding StringFormat="{}Приблизний час доставки: {0}">
                                     <Binding Path="EstimateProcessTime"/>
                                 </MultiBinding>
                             </TextBlock.Text>
