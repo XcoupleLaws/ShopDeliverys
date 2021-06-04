@@ -1,0 +1,159 @@
+<Window x:Class="WPFApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:WPFApp.ViewModels"
+        xmlns:unitOfWork="clr-namespace:DAL.UnitOfWork;assembly=DAL"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="660" Background="SlateGray" >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        
+        <Label Content="Замовлення:" HorizontalAlignment="Center"/>
+        <Border Grid.Column="0" BorderBrush="Azure" BorderThickness="1">
+            <StackPanel>
+                <Canvas>
+                    
+                    
+                    <ListBox Height="200" Width="220" Canvas.Top="50" Canvas.Left="55" HorizontalAlignment="Left" 
+                             x:Name="LbGoodsSelection" Background="Wheat" 
+                             HorizontalContentAlignment="Stretch" ItemsSource="{Binding Goods}"
+                             SelectedItem="{Binding SelectedGoods}">
+                    
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="5" Background="Cornsilk" >
+                                <TextBlock FontSize="14" Text="{Binding Name}" />
+                                <TextBlock Text="{Binding Path=Type}" />
+                                <TextBlock Text="{Binding Path=Price}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                
+                <ListBox Name="LbWarehouseSelection" 
+                         Height="200" Width="220"  
+                         Canvas.Left="55" Canvas.Top="300"
+                         Background="Wheat" 
+                         HorizontalContentAlignment="Stretch" HorizontalAlignment="Left" 
+                         ItemsSource="{Binding Warehouses}" SelectedItem="{Binding SelectedWarehouse}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="1" Background="Cornsilk" >
+                                <TextBlock FontSize="12" Text="{Binding Name}" />
+                                <TextBlock Text="{Binding Path=Distance}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                
+                <Button Command="{Binding AddGoodsCommand}" Canvas.Left="160" Canvas.Top="250" Width="85" 
+                Height="20" 
+                Content="Додати товар"/>
+                
+                <Button Command="{Binding CommitOrderCommand}"  Canvas.Top="500" Width="135" 
+                        Height="20" Canvas.Left="97.5"
+                        Content="Обробити замовлення"/>
+                
+                <TextBox Text="{Binding GoodsQuantity}" Canvas.Left="85" Canvas.Top="250" 
+                                          Width="70" 
+                                          Height="20"/>
+                
+            </Canvas>
+        </StackPanel>
+            </Border>
+        <Grid Grid.Column="1" DataContext="{Binding OrderDataViewModel}" >
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Label Content="Список товарів:" HorizontalAlignment="Center"/>
+            <Border BorderBrush="Azure" BorderThickness="1">
+            <StackPanel>
+                <Canvas>
+                <ListBox MaxHeight="200" Width="220" Canvas.Top="50" Canvas.Left="55" 
+                         Background="Wheat" 
+                         HorizontalContentAlignment="Stretch" ItemsSource="{Binding Orders}" SelectedItem="{Binding 
+                         SelectedOrder}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="5" Background="Cornsilk">
+                                <TextBlock FontSize="16" Text="{Binding Id}" >
+                                </TextBlock>
+                                <TextBlock Text="{Binding Path=TimeOfCreation}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>       
+                </Canvas>
+            </StackPanel>
+            </Border>
+            <Border DataContext="{Binding SelectedOrder}" Grid.Row="1" BorderBrush="Cornsilk" BorderThickness="1">
+                
+                <Grid>
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    
+                    <Label Content="Іформація про замовлення:" HorizontalAlignment="Center"/>
+                    <Canvas Grid.Row="0">
+                        <TextBlock  Padding="3 0 0 0" Background="Cornsilk" Canvas.Left="55" Canvas.Top="25" Width="220" Height="25">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}Total Cost: {0}">
+                                    <Binding Path="TotalCost"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock  Padding="3 0 0 0" Background="Cornsilk" Width="220" Canvas.Left="55" Height="25" Canvas.Top="50">
+                            <TextBlock.Text >
+                                <MultiBinding StringFormat="{}Creation Time: {0}">
+                                    <Binding Path="TimeOfCreation"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock Padding="3 0 0 0" Background="Cornsilk" Width="220" Canvas.Left="55" Height="25" Canvas.Top="75">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}Estimate Delivery Time: {0}">
+                                    <Binding Path="EstimateProcessTime"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </Canvas>
+                    
+                        <Canvas Grid.Row="1">
+                            
+                            <ListBox MaxHeight="125" Width="220"
+                                     Canvas.Left="55"
+                                     Canvas.Top="-35"
+                                     Background="Wheat" 
+                                     ItemsSource="{Binding OrderItems}" 
+                                     SelectedItem="{Binding 
+                         SelectedOrder}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="4 2"  Background="Cornsilk" Width="180">
+                                        <TextBlock Background="Cornsilk"  Height="20" Padding="3 0 0 0" >
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{1} x {0}">
+                                                    <Binding Path="Goods.Name"/>
+                                                    <Binding Path="Quantity"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>       
+                    </Canvas>
+                </Grid>
+            </Border>
+            
+        </Grid>
+    </Grid>
+</Window>
