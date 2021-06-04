@@ -77,5 +77,11 @@ namespace Services.Implementation
 	        _unitOfWork.Orders.GetAll()
 		        .Select(order => _orderMapper.ToModel(order))
 		        .ToList();
+
+        public void Delete(OrderModel order)
+        {
+	        _unitOfWork.Orders.Delete(_orderMapper.ToEntity(order));
+	        _unitOfWork.CommitChanges();
+        }
     }
 }

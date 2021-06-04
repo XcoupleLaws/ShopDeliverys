@@ -73,21 +73,30 @@
             </Grid.RowDefinitions>
             <Label Content="Список товарів:" HorizontalAlignment="Center"/>
             <Border BorderBrush="Azure" BorderThickness="1">
-            <StackPanel>
+            <StackPanel >
                 <Canvas>
-                <ListBox MaxHeight="200" Width="220" Canvas.Top="50" Canvas.Left="55" 
-                         Background="Wheat" 
+                <ListBox MaxHeight="200" Width="300" Canvas.Top="50" Canvas.Left="20" 
+                         Background="Wheat"
                          HorizontalContentAlignment="Stretch" ItemsSource="{Binding Orders}" SelectedItem="{Binding 
                          SelectedOrder}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="5" Background="Cornsilk">
+                            <StackPanel  x:Name="stackPanel" Orientation="Horizontal" MaxWidth="230" Margin="5" Background="Cornsilk">
                                 <TextBlock FontSize="16" Text="{Binding Id}" >
                                 </TextBlock>
                                 <TextBlock Text="{Binding Path=TimeOfCreation}" />
+                                <Button Command="{Binding DataContext.DeleteOrderCommand, 
+                                RelativeSource={RelativeSource 
+                                AncestorType=Grid}}"  Height="20" Width="20">
+                                    <StackPanel>
+                                        <Image Source="C:Users/Vyatalech/Desktop/trash.png"/>
+                                    </StackPanel>
+                                </Button>
                             </StackPanel>
+                            
                         </DataTemplate>
                     </ListBox.ItemTemplate>
+                    
                 </ListBox>       
                 </Canvas>
             </StackPanel>

@@ -21,7 +21,7 @@ namespace Services.Implementation
         
         public List<GoodsModel> GetAll() =>
 	        _unitOfWork.Goods.GetAll()
-                .Select(goods => _goodsMapper.ToModel(goods))
+		        .Select(goods => _goodsMapper.ToModel(goods))
                 .ToList();
 
     }

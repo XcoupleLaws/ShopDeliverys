@@ -23,6 +23,7 @@ namespace WPFApp.ViewModels
 		private ObservableCollection<OrderModel> _orders;
 		private OrderModel _selectedOrder;
 
+		private ICommand deleteOrderCommand;
 		public ObservableCollection<OrderModel> Orders
 		{
 			get => _orders;
@@ -40,7 +41,16 @@ namespace WPFApp.ViewModels
 				OnPropertyChanged();
 			}
 		}
-		
+
+		public ICommand DeleteOrderCommand => deleteOrderCommand ??= new CommandHandler( //розумний обработчик
+			() =>
+			{
+				_orderService.Delete(_selectedOrder);
+				var check = _orderService.GetAll();
+				Orders = new ObservableCollection<OrderModel>(_orderService.GetAll());
+			},
+			() =>
+				_selectedOrder != null);
 		public OrderDataViewModel(IServiceProvider serviceProvider)
 		{
 			RegisterServices(serviceProvider);

@@ -22,15 +22,15 @@ namespace EfRepository.Repositories
 			_dataContext = dataContext;
 		}
 
-		public virtual void Delete(TEntity entity)
+		public virtual void Delete(TEntity entity) =>
+			_dataTable.Remove(_dataTable.Find(entity.Id));
+		
+
+		public virtual List<TEntity> GetAll()
 		{
-			_dataContext.Entry(entity).State = EntityState.Unchanged;
-			_dataTable.Attach(entity);
-
-			_dataTable.Remove(entity);
+			var check = _dataTable.ToList();
+			return _dataTable.ToList();
 		}
-
-		public virtual List<TEntity> GetAll() => _dataTable.ToList();
 
 
 		public virtual TEntity GetById(int id) =>

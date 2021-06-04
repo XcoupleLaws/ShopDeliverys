@@ -11,5 +11,7 @@ namespace Services.Abstractions
         void ProcessOrder(OrderModel order);
         void Add(OrderModel order);
         public List<OrderModel> GetAll();
+
+        void Delete(OrderModel order);
     }
 }
