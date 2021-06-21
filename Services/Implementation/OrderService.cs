@@ -17,16 +17,18 @@ namespace Services.Implementation
     {
 	    private readonly IUnitOfWork _unitOfWork;
 	    
-	    private readonly OrderMapper _orderMapper;
+	    private readonly EmployeeMapper _employeeMapper;
+	    private readonly OrderMapper    _orderMapper;
 
 	    private readonly IStaffService _staffService;
 	    
-        public OrderService( IUnitOfWork context, OrderMapper orderMapper, IStaffService staffService)
+        public OrderService( IUnitOfWork context, OrderMapper orderMapper,EmployeeMapper employeeMapper, IStaffService staffService)
         {
             _unitOfWork = context;
             
-            _orderMapper = orderMapper;
-
+            _employeeMapper = employeeMapper;
+            _orderMapper    = orderMapper;
+            
             _staffService = staffService;
         }
 
@@ -80,7 +82,29 @@ namespace Services.Implementation
 
         public void Delete(OrderModel order)
         {
-	        _unitOfWork.Orders.Delete(_orderMapper.ToEntity(order));
+	        var orderEntity = _orderMapper.ToEntity(order);
+	        var relatedEmployees  = _unitOfWork.Orders
+			        .GetRelatedEmployees(orderEntity)
+			        .Select<EmployeeEntity, EmployeeModel>(employeeEntity =>
+			        ((employeeEntity.EmployeeSpecialityId == 1)
+				        ? _employeeMapper.ToModel(employeeEntity) as DriverModel
+				        : _employeeMapper.ToModel(employeeEntity) as ManagerModel)
+			        !)
+			        .ToList();
+	        
+	        foreach (var employeeModel in relatedEmployees)
+	        {
+		        if ((employeeModel as ManagerModel) == null)
+			        employeeModel.LoadedHours -= ((employeeModel as DriverModel)!).CalculateDeliveryTime(order);
+		        else 
+			        employeeModel.LoadedHours -= ((employeeModel as ManagerModel)!).CalculateOrderProcessTime(order);
+	        }
+	        
+	        relatedEmployees.Select(employeeModel => _employeeMapper
+			        .ToEntity(employeeModel))
+		        .ToList()
+		        .ForEach(relatedEmployee => _unitOfWork.Employees.Update(relatedEmployee));
+	        _unitOfWork.Orders.Delete(orderEntity);
 	        _unitOfWork.CommitChanges();
         }
     }
