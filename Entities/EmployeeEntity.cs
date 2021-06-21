@@ -19,7 +19,7 @@ namespace Entities
 
         [NotMapped]
         public TimeSpan LoadedHours
-        {
+        {   
 	        get => TimeSpan.FromTicks(LoadedHoursTicks);
 	        set => LoadedHoursTicks = value.Ticks;
         }

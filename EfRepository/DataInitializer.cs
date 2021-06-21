@@ -6,7 +6,7 @@ using Types;
 
 namespace EfRepository
 {
-    public class DataInitializer : DropCreateDatabaseAlways<ShopContext>
+    public class DataInitializer : CreateDatabaseIfNotExists<ShopContext>
     {
         protected override void Seed(ShopContext context)
         {

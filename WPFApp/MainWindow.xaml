@@ -6,14 +6,14 @@
         xmlns:local="clr-namespace:WPFApp.ViewModels"
         xmlns:unitOfWork="clr-namespace:DAL.UnitOfWork;assembly=DAL"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="660" Background="SlateGray" >
+        Title="MainWindow" Height="600" Width="660" ResizeMode="NoResize" Background="SlateGray" >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         
-        <Label Content="Замовлення:" HorizontalAlignment="Center"/>
+        <Label Margin="0 15 0 0" Content="Замовлення:" HorizontalAlignment="Center"/>
         <Border Grid.Column="0" BorderBrush="Azure" BorderThickness="1">
             <StackPanel>
                 <Canvas>
@@ -83,7 +83,7 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <Label Content="Список товарів:" HorizontalAlignment="Center"/>
+            <Label Margin="0 15 0 0" Content="Список товарів:" HorizontalAlignment="Center"/>
             <Border BorderBrush="Azure" BorderThickness="1">
             <StackPanel>
                 <Canvas>
@@ -93,36 +93,32 @@
                          SelectedOrder}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel  x:Name="stackPanel" Orientation="Horizontal" MaxWidth="230" Margin="5" Background="Cornsilk">
+                                <StackPanel  x:Name="stackPanel"  MaxWidth="230" Margin="5" Background="Cornsilk">
                                     <TextBlock FontSize="16" Text="{Binding Id}" >
                                     </TextBlock>
                                     <TextBlock Text="{Binding Path=TimeOfCreation}" />
-                                    <Button Command="{Binding DataContext.DeleteOrderCommand, 
-                                RelativeSource={RelativeSource 
-                                AncestorType=Grid}}"  Height="20" Width="20">
-                                        <StackPanel>
-                                            <Image Source="C:Users/Vyatalech/Desktop/trash.png"/>
-                                        </StackPanel>
-                                    </Button>
                                 </StackPanel>
 
                             </DataTemplate>
                         </ListBox.ItemTemplate>
 
-                    </ListBox>       
+                    </ListBox> 
+                    <Button  Canvas.Top="230" Canvas.Left="285" Command="{Binding DataContext.DeleteOrderCommand, 
+                                RelativeSource={RelativeSource 
+                                AncestorType=Grid}}"  Height="23" Width="20">
+                            <Image Source="C:/Users/user/Desktop/img/images.png" Stretch="Fill"/>
+                    </Button>
                 </Canvas>
+                
             </StackPanel>
+                
             </Border>
             <Border DataContext="{Binding SelectedOrder}" Grid.Row="1" BorderBrush="Cornsilk" BorderThickness="1">
                 
-                <Grid>
+                <Grid Grid.Row="1">
                     
-                    <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                    </Grid.RowDefinitions>
                     
-                    <Label Content="Іформація про замовлення:" HorizontalAlignment="Center"/>
+                    <Label Grid.Row="0" Content="Іформація про замовлення:" HorizontalAlignment="Center"/>
                     <Canvas Grid.Row="0">
                         <TextBlock  Padding="3 0 0 0" Background="Cornsilk" Canvas.Left="55" Canvas.Top="25" Width="220" Height="25">
                             <TextBlock.Text>
@@ -147,11 +143,11 @@
                         </TextBlock>
                     </Canvas>
                     
-                        <Canvas Grid.Row="1">
+                        <Canvas>
                             
-                            <ListBox MaxHeight="125" Width="220"
+                            <ListBox Canvas.Top="105"
                                      Canvas.Left="55"
-                                     Canvas.Top="-35"
+                                     MaxHeight="125" Width="220"
                                      Background="Wheat" 
                                      ItemsSource="{Binding OrderItems}" 
                                      SelectedItem="{Binding 
